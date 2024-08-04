@@ -173,4 +173,29 @@ document.addEventListener('keyup', (e) => {
   }
 });
 
+// Mobil dokunmatik kontrol
+let touchZoneWidth = canvas.width / 2;
+
+function handleTouchMove(e) {
+  const touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+  
+  if (touchX < touchZoneWidth) {
+    // Sol tarafa dokunuldu
+    keys.ArrowLeft = true;
+    keys.ArrowRight = false;
+  } else {
+    // Sağ tarafa dokunuldu
+    keys.ArrowRight = true;
+    keys.ArrowLeft = false;
+  }
+}
+
+function handleTouchEnd() {
+  keys.ArrowLeft = false;
+  keys.ArrowRight = false;
+}
+
+canvas.addEventListener('touchmove', handleTouchMove);
+canvas.addEventListener('touchend', handleTouchEnd);
+
 carImage.onload = gameLoop;
