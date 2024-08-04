@@ -157,41 +157,4 @@ function restartGame() {
   carY = canvas.height - carHeight - 20;
   enemyCars.length = 0;
   document.getElementById('score').innerText = `Score: ${score}`;
-  document.getElementById('restartButton').style.display = 'none';
-  gameLoop();
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.code in keys) {
-    keys[e.code] = true;
-  }
-});
-
-document.addEventListener('keyup', (e) => {
-  if (e.code in keys) {
-    keys[e.code] = false;
-  }
-});
-
-// Mobil Kontroller için Event Listener
-document.getElementById('leftButton').addEventListener('touchstart', () => {
-  keys.ArrowLeft = true;
-  keys.KeyA = true;
-});
-
-document.getElementById('rightButton').addEventListener('touchstart', () => {
-  keys.ArrowRight = true;
-  keys.KeyD = true;
-});
-
-document.getElementById('leftButton').addEventListener('touchend', () => {
-  keys.ArrowLeft = false;
-  keys.KeyA = false;
-});
-
-document.getElementById('rightButton').addEventListener('touchend', () => {
-  keys.ArrowRight = false;
-  keys.KeyD = false;
-});
-
-carImage.onload = gameLoop;
+  document.getElementById
