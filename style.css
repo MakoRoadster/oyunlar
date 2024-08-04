@@ -62,7 +62,6 @@ canvas {
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
-  user-select: none; /* Metin seçimini engelle */
 }
 
 #mobileControls div {
@@ -76,7 +75,6 @@ canvas {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  touch-action: manipulation; /* Dokunmatik ekran eylemlerini optimize et */
 }
 
 @media only screen and (max-width: 600px) {
