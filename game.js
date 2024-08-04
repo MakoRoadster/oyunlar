@@ -173,29 +173,25 @@ document.addEventListener('keyup', (e) => {
   }
 });
 
-// Mobil dokunmatik kontrol
-let touchZoneWidth = canvas.width / 2;
+// Mobil Kontroller için Event Listener
+document.getElementById('leftButton').addEventListener('touchstart', () => {
+  keys.ArrowLeft = true;
+  keys.KeyA = true;
+});
 
-function handleTouchMove(e) {
-  const touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
-  
-  if (touchX < touchZoneWidth) {
-    // Sol tarafa dokunuldu
-    keys.ArrowLeft = true;
-    keys.ArrowRight = false;
-  } else {
-    // Sağ tarafa dokunuldu
-    keys.ArrowRight = true;
-    keys.ArrowLeft = false;
-  }
-}
+document.getElementById('rightButton').addEventListener('touchstart', () => {
+  keys.ArrowRight = true;
+  keys.KeyD = true;
+});
 
-function handleTouchEnd() {
+document.getElementById('leftButton').addEventListener('touchend', () => {
   keys.ArrowLeft = false;
-  keys.ArrowRight = false;
-}
+  keys.KeyA = false;
+});
 
-canvas.addEventListener('touchmove', handleTouchMove);
-canvas.addEventListener('touchend', handleTouchEnd);
+document.getElementById('rightButton').addEventListener('touchend', () => {
+  keys.ArrowRight = false;
+  keys.KeyD = false;
+});
 
 carImage.onload = gameLoop;
