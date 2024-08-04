@@ -54,3 +54,32 @@ body {
     transform: translate(-50%, -50%) scale(0.95);
   }
   
+  #mobileControls {
+    display: none; /* Varsayılan olarak gizli */
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+  
+  #mobileControls div {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    text-align: center;
+    line-height: 80px;
+    font-size: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    #mobileControls {
+      display: flex;
+    }
+  }
+  
