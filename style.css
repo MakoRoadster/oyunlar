@@ -7,7 +7,6 @@ body {
   background: #000000;
   color: #fff;
   font-family: Arial, sans-serif;
-  user-select: none; /* Tüm sayfada metin seçimini devre dışı bırak */
 }
 
 canvas {
@@ -77,7 +76,7 @@ canvas {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   user-select: none; /* Metin seçimini devre dışı bırak */
-  -webkit-user-select: none; /* Eski tarayıcılar için */
+  -webkit-user-select: none; /* Safari için */
 }
 
 @media only screen and (max-width: 600px) {
