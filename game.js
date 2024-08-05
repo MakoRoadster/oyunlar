@@ -38,7 +38,7 @@ const enemyCarHeight = 70;
 const boxWidth = 30;
 const boxHeight = 30;
 const boxes = [];
-const boxAppearanceRate = 0.00041; // Kutu çıkma oranı
+const boxAppearanceRate = 0.001; // Kutu çıkma oranı
 
 // Skor ve oyun durumu
 let score = 0;
@@ -239,7 +239,7 @@ function gameLoop() {
   }
 
   // Düşman arabası oluşturma
-  if (Math.random() < 0.02) {
+  if (Math.random() < 0.014) {
     createEnemyCar();
   }
 
