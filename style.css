@@ -7,11 +7,16 @@ body {
   background: #000000;
   color: #fff;
   font-family: Arial, sans-serif;
+  overflow: hidden; /* Yakınlaştırmayı devre dışı bırak */
 }
 
 canvas {
   background: #444;
   border: 2px solid #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  user-select: none; /* Metin seçimini devre dışı bırak */
+  -webkit-user-select: none; /* Safari için */
 }
 
 #score {
