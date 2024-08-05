@@ -237,17 +237,6 @@ function gameLoop() {
     carY += carSpeed;
   }
 
-  // Düşman arabası oluşturma
-  if (Math.random() < 0.014) {
-    createEnemyCar();
-  }
-
-  // Kutu oluşturma
-  if (Math.random() < boxAppearanceRate) {
-    createBox();
-  }
-
-  // Skoru güncelleme
   document.getElementById('score').textContent = 'Score: ' + score;
 
   requestAnimationFrame(gameLoop);
@@ -310,6 +299,14 @@ document.addEventListener('touchstart', function(event) {
 }, { passive: false });
 
 document.addEventListener('gesturestart', function(event) {
+  event.preventDefault();
+});
+
+document.addEventListener('gesturechange', function(event) {
+  event.preventDefault();
+});
+
+document.addEventListener('gestureend', function(event) {
   event.preventDefault();
 });
 
