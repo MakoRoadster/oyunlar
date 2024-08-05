@@ -67,6 +67,7 @@ canvas {
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
+  top: 81%;
 }
 
 #mobileControls div {
