@@ -234,18 +234,18 @@ function checkCollision() {
 }
 
 function gameLoop() {
-  if (gameOver) return;
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  update();
-  drawRoad();
-  drawCar();
-  drawEnemyCars();
-  drawBoxes();
-  checkCollision();
+  if (!gameOver) {
+    update();
+    drawRoad();
+    drawCar();
+    drawEnemyCars();
+    drawBoxes();
+    checkCollision();
 
-  requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop);
+  }
 }
 
 function restartGame() {
@@ -277,6 +277,30 @@ document.addEventListener('keyup', (e) => {
 });
 
 document.getElementById('restartButton').addEventListener('click', restartGame);
+
+// Mobil kontroller
+canvas.addEventListener('touchstart', (e) => {
+  const touchX = e.touches[0].clientX - canvas.offsetLeft;
+  const canvasWidth = canvas.width;
+  const middleX = canvasWidth / 2;
+
+  if (touchX < middleX) {
+    keys.ArrowLeft = true;
+  } else {
+    keys.ArrowRight = true;
+  }
+});
+
+canvas.addEventListener('touchend', () => {
+  keys.ArrowLeft = false;
+  keys.ArrowRight = false;
+});
+
+// Sağ tıklama menüsünü engelle
+canvas.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  return false;
+});
 
 // Başlangıçta oyun döngüsünü başlat
 gameLoop();
