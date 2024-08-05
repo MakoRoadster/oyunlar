@@ -103,6 +103,7 @@ function update() {
     roadY = 0;
   }
 
+  // Skoru geçen zamana göre artır
   elapsedTime += 1 / 60; // oyunun 60 FPS çalıştığını varsayıyoruz
   if (elapsedTime >= 1) {
     score += 1;
@@ -151,4 +152,52 @@ function gameLoop() {
 function restartGame() {
   gameOver = false;
   score = 0;
- 
+  elapsedTime = 0; // Geçen zamanı sıfırla
+  carX = (canvas.width - carWidth) / 2;
+  carY = canvas.height - carHeight - 20;
+  enemyCars.length = 0;
+  document.getElementById('score').innerText = `Score: ${score}`;
+  document.getElementById('restartButton').style.display = 'none';
+  gameLoop();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.code in keys) {
+    keys[e.code] = true;
+  }
+});
+
+document.addEventListener('keyup', (e) => {
+  if (e.code in keys) {
+    keys[e.code] = false;
+  }
+});
+
+// Mobil Kontroller için Event Listener
+document.getElementById('leftButton').addEventListener('touchstart', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
+  keys.ArrowLeft = true;
+  keys.KeyA = true;
+});
+
+document.getElementById('rightButton').addEventListener('touchstart', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
+  keys.ArrowRight = true;
+  keys.KeyD = true;
+});
+
+document.getElementById('leftButton').addEventListener('touchend', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
+  keys.ArrowLeft = false;
+  keys.KeyA = false;
+});
+
+document.getElementById('rightButton').addEventListener('touchend', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
+  keys.ArrowRight = false;
+  keys.KeyD = false;
+});
+
+document.getElementById('restartButton').addEventListener('click', restartGame);
+
+gameLoop();
