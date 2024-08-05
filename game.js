@@ -143,22 +143,87 @@ function drawRoad() {
 
 // Düşman arabalarını çiz
 function drawEnemyCars() {
-  enemyCars.forEach(enemyCar => {
+  ctx.fillStyle = 'red';
+  for (let i = 0; i < enemyCars.length; i++) {
+    const enemyCar = enemyCars[i];
     ctx.drawImage(enemyCarImage, enemyCar.x, enemyCar.y, enemyCarWidth, enemyCarHeight);
-    enemyCar.y += enemyCar.speed;
-  });
+  }
 }
 
 // Kutuları çiz
 function drawBoxes() {
-  boxes.forEach(box => {
+  ctx.fillStyle = 'blue';
+  for (let i = 0; i < boxes.length; i++) {
+    const box = boxes[i];
     ctx.drawImage(boxImage, box.x, box.y, boxWidth, boxHeight);
-    box.y += roadSpeed;
-  });
+  }
 }
 
-// Güncelleme fonksiyonu
-function update() {
+// Çarpışma kontrolü
+function checkCollision(rect1, rect2) {
+  return (
+    rect1.x < rect2.x + rect2.width &&
+    rect1.x + rect1.width > rect2.x &&
+    rect1.y < rect2.y + rect2.height &&
+    rect1.y + rect1.height > rect2.y
+  );
+}
+
+// Oyun döngüsü
+function gameLoop() {
+  if (gameOver) return;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Yol çizme ve kaydırma
+  drawRoad();
+  roadY += roadSpeed;
+  if (roadY >= canvas.height) {
+    roadY = 0;
+  }
+
+  // Araba çizme
+  drawCar();
+
+  // Düşman arabalarını güncelleme ve çizme
+  for (let i = 0; i < enemyCars.length; i++) {
+    const enemyCar = enemyCars[i];
+    enemyCar.y += enemyCar.speed;
+    if (!isInvisible && checkCollision({ x: carX, y: carY, width: carWidth, height: carHeight }, { x: enemyCar.x, y: enemyCar.y, width: enemyCarWidth, height: enemyCarHeight })) {
+      gameOver = true;
+      document.getElementById('restartButton').style.display = 'block';
+      document.getElementById('score').textContent = 'Score: ' + score;
+      return;
+    }
+    if (enemyCar.y > canvas.height) {
+      enemyCars.splice(i, 1);
+      i--;
+    }
+  }
+
+  drawEnemyCars();
+
+  // Kutuları güncelleme ve çizme
+  for (let i = 0; i < boxes.length; i++) {
+    const box = boxes[i];
+    box.y += roadSpeed;
+    if (!isInvisible && checkCollision({ x: carX, y: carY, width: carWidth, height: carHeight }, { x: box.x, y: box.y, width: boxWidth, height: boxHeight })) {
+      isInvisible = true;
+      clearTimeout(invisibleTimeout); // Mevcut zamanlayıcıyı temizle
+      invisibleTimeout = setTimeout(() => {
+        isInvisible = false;
+      }, 5000); // 5 saniye görünmez ol
+      boxes.splice(i, 1);
+      i--;
+    } else if (box.y > canvas.height) {
+      boxes.splice(i, 1);
+      i--;
+    }
+  }
+
+  drawBoxes();
+
+  // Araba hareketi
   if ((keys.ArrowLeft || keys.KeyA) && carX > roadX) {
     carX -= carSpeed;
   }
@@ -171,128 +236,69 @@ function update() {
   if ((keys.ArrowDown || keys.KeyS) && carY < canvas.height - carHeight) {
     carY += carSpeed;
   }
-  roadY += roadSpeed;
-  if (roadY >= canvas.height) {
-    roadY = 0;
-  }
 
-  // Skoru geçen zamana göre artır
-  elapsedTime += 1 / 60; // oyunun 60 FPS çalıştığını varsayıyoruz
-  if (elapsedTime >= 1) {
-    score += 1;
-    document.getElementById('score').innerText = `Score: ${score}`;
-    elapsedTime = 0;
-  }
-
-  // Düşman arabalarını ekrandan çıkar
-  enemyCars.forEach((enemyCar, index) => {
-    if (enemyCar.y > canvas.height) {
-      enemyCars.splice(index, 1);
-    }
-  });
-
-  // Kutuları ekrandan çıkar
-  boxes.forEach((box, index) => {
-    if (box.y > canvas.height) {
-      boxes.splice(index, 1);
-    }
-  });
-
-  // Yeni düşman arabası ve kutu oluştur
-  if (Math.random() < 0.012) {
+  // Düşman arabası oluşturma
+  if (Math.random() < 0.02) {
     createEnemyCar();
   }
+
+  // Kutu oluşturma
   if (Math.random() < boxAppearanceRate) {
     createBox();
   }
-}
 
-// Çarpışma kontrolü
-function checkCollision() {
-  if (isInvisible) return;
+  // Skoru güncelleme
+  document.getElementById('score').textContent = 'Score: ' + score;
 
-  enemyCars.forEach(enemyCar => {
-    if (
-      carX < enemyCar.x + enemyCarWidth &&
-      carX + carWidth > enemyCar.x &&
-      carY < enemyCar.y + enemyCarHeight &&
-      carY + carHeight > enemyCar.y
-    ) {
-      gameOver = true;
-      document.getElementById('restartButton').style.display = 'block';
-      document.getElementById('score').innerText += ' - Game Over!';
-    }
-  });
-
-  boxes.forEach((box, index) => {
-    if (
-      carX < box.x + boxWidth &&
-      carX + carWidth > box.x &&
-      carY < box.y + boxHeight &&
-      carY + carHeight > box.y
-    ) {
-      boxes.splice(index, 1);
-      makeCarInvisible();
-    }
-  });
-}
-
-// Arabayı görünmez yap
-function makeCarInvisible() {
-  isInvisible = true;
-  if (invisibleTimeout) clearTimeout(invisibleTimeout);
-  invisibleTimeout = setTimeout(() => {
-    isInvisible = false;
-  }, 6000);
-}
-
-// Oyun döngüsü
-function gameLoop() {
-  if (gameOver) return;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawRoad();
-  drawCar();
-  drawEnemyCars();
-  drawBoxes();
-  update();
-  checkCollision();
   requestAnimationFrame(gameLoop);
 }
 
-// Skoru her saniye artırma
+// Skorun her saniye artmasını sağla
 function incrementScore() {
   if (!gameOver) {
-    score += 1;
-    document.getElementById('score').innerText = `Score: ${score}`;
+    score++;
+    document.getElementById('score').textContent = 'Score: ' + score;
     setTimeout(incrementScore, 1000);
   }
 }
 
-// Oyun başlatma
-function startGame() {
-  gameOver = false;
-  score = 0;
-  enemyCars.length = 0;
-  boxes.length = 0;
-  document.getElementById('restartButton').style.display = 'none';
-  document.getElementById('score').innerText = `Score: ${score}`;
+// Oyun yeniden başlatma
+document.getElementById('restartButton').addEventListener('click', () => {
   carX = (canvas.width - carWidth) / 2;
   carY = canvas.height - carHeight - 20;
-  requestAnimationFrame(gameLoop);
-  incrementScore();
-}
+  enemyCars.length = 0;
+  boxes.length = 0;
+  score = 0;
+  elapsedTime = 0;
+  gameOver = false;
+  document.getElementById('restartButton').style.display = 'none';
+  gameLoop();
+  incrementScore(); // Skoru her saniye artırmaya başla
+});
 
-// Tuşları dinleme
+// Tuş dinleyicileri
 document.addEventListener('keydown', (e) => {
-  keys[e.code] = true;
+  if (keys.hasOwnProperty(e.code)) {
+    keys[e.code] = true;
+  }
 });
 
 document.addEventListener('keyup', (e) => {
-  keys[e.code] = false;
+  if (keys.hasOwnProperty(e.code)) {
+    keys[e.code] = false;
+  }
 });
 
-// Dokunma olayları ve yakınlaştırmayı engelleme
+// Dokunma olaylarını dinleyicilere ekle
+const leftButton = document.getElementById('leftButton');
+const rightButton = document.getElementById('rightButton');
+
+leftButton.addEventListener('touchstart', () => keys.ArrowLeft = true);
+leftButton.addEventListener('touchend', () => keys.ArrowLeft = false);
+rightButton.addEventListener('touchstart', () => keys.ArrowRight = true);
+rightButton.addEventListener('touchend', () => keys.ArrowRight = false);
+
+// Yakınlaştırmayı ve seçimleri devre dışı bırak
 document.addEventListener('touchmove', function(event) {
   event.preventDefault();
 }, { passive: false });
@@ -307,15 +313,6 @@ document.addEventListener('gesturestart', function(event) {
   event.preventDefault();
 });
 
-document.addEventListener('gesturechange', function(event) {
-  event.preventDefault();
-});
-
-document.addEventListener('gestureend', function(event) {
-  event.preventDefault();
-});
-
-// Yeniden başlat butonunu dinleme
-document.getElementById('restartButton').addEventListener('click', startGame);
-
-startGame();
+// Oyunu başlat
+gameLoop();
+incrementScore(); // Skoru her saniye artırmaya başla
