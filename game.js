@@ -180,4 +180,24 @@ document.getElementById('leftButton').addEventListener('touchstart', (event) => 
   keys.KeyA = true;
 });
 
-document.get
+document.getElementById('rightButton').addEventListener('touchstart', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
+  keys.ArrowRight = true;
+  keys.KeyD = true;
+});
+
+document.getElementById('leftButton').addEventListener('touchend', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
+  keys.ArrowLeft = false;
+  keys.KeyA = false;
+});
+
+document.getElementById('rightButton').addEventListener('touchend', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
+  keys.ArrowRight = false;
+  keys.KeyD = false;
+});
+
+document.getElementById('restartButton').addEventListener('click', restartGame);
+
+gameLoop();
