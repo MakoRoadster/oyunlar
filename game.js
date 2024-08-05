@@ -174,24 +174,10 @@ document.addEventListener('keyup', (e) => {
 });
 
 // Mobil Kontroller için Event Listener
-document.getElementById('leftButton').addEventListener('touchstart', () => {
+document.getElementById('leftButton').addEventListener('touchstart', (event) => {
+  event.preventDefault(); // Varsayılan davranışı engelle
   keys.ArrowLeft = true;
   keys.KeyA = true;
 });
 
-document.getElementById('rightButton').addEventListener('touchstart', () => {
-  keys.ArrowRight = true;
-  keys.KeyD = true;
-});
-
-document.getElementById('leftButton').addEventListener('touchend', () => {
-  keys.ArrowLeft = false;
-  keys.KeyA = false;
-});
-
-document.getElementById('rightButton').addEventListener('touchend', () => {
-  keys.ArrowRight = false;
-  keys.KeyD = false;
-});
-
-carImage.onload = gameLoop;
+document.get
