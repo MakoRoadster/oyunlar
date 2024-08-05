@@ -198,7 +198,6 @@ function gameLoop() {
     if (enemyCar.y > canvas.height) {
       enemyCars.splice(i, 1);
       i--;
-      score++;
     }
   }
 
@@ -254,6 +253,15 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
+// Skorun her saniye artmasını sağla
+function incrementScore() {
+  if (!gameOver) {
+    score++;
+    document.getElementById('score').textContent = 'Score: ' + score;
+    setTimeout(incrementScore, 1000);
+  }
+}
+
 // Oyun yeniden başlatma
 document.getElementById('restartButton').addEventListener('click', () => {
   carX = (canvas.width - carWidth) / 2;
@@ -261,9 +269,11 @@ document.getElementById('restartButton').addEventListener('click', () => {
   enemyCars.length = 0;
   boxes.length = 0;
   score = 0;
+  elapsedTime = 0;
   gameOver = false;
   document.getElementById('restartButton').style.display = 'none';
   gameLoop();
+  incrementScore(); // Skoru her saniye artırmaya başla
 });
 
 // Tuş dinleyicileri
@@ -305,3 +315,4 @@ document.addEventListener('gesturestart', function(event) {
 
 // Oyunu başlat
 gameLoop();
+incrementScore(); // Skoru her saniye artırmaya başla
