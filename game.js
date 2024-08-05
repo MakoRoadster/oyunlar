@@ -12,8 +12,9 @@ const carSpeed = 5;
 const roadWidth = 200;
 const roadX = (canvas.width - roadWidth) / 2;
 
-let roadY = 0;
-let roadSpeed = 2;
+let roadY1 = 0; // İlk yol parçası
+let roadY2 = -canvas.height; // İkinci yol parçası
+const roadSpeed = 2;
 
 const keys = {
   ArrowLeft: false,
@@ -59,19 +60,19 @@ function getEnemyCarSpeed() {
   if (score >= 210) {
     return 14 + Math.random() * (19 - 14); // 14-19 aralığında hız
   } else if (score >= 180) {
-    return 12 + Math.random() * (17 - 12); // 8-14 aralığında hız
+    return 12 + Math.random() * (17 - 12); // 12-17 aralığında hız
   } else if (score >= 150) {
-    return 10 + Math.random() * (15 - 10); // 7-13 aralığında hız
+    return 10 + Math.random() * (15 - 10); // 10-15 aralığında hız
   } else if (score >= 120) {
-    return 8 + Math.random() * (13 - 8); // 6-11 aralığında hız
+    return 8 + Math.random() * (13 - 8); // 8-13 aralığında hız
   } else if (score >= 90) {
-    return 6 + Math.random() * (11 - 6); // 5-9 aralığında hız
+    return 6 + Math.random() * (11 - 6); // 6-11 aralığında hız
   } else if (score >= 60) {
-    return 5 + Math.random() * (9 - 5); // 3-8 aralığında hız
+    return 5 + Math.random() * (9 - 5); // 5-9 aralığında hız
   } else if (score >= 30) {
-    return 4 + Math.random() * (8 - 4); // 3-7 aralığında hız
-  }  else {
-    return 3 + Math.random() * (7 - 3); // normal hiz
+    return 4 + Math.random() * (8 - 4); // 4-8 aralığında hız
+  } else {
+    return 3 + Math.random() * (7 - 3); // 3-7 aralığında hız
   }
 }
 
@@ -111,16 +112,20 @@ function drawCar() {
 
 function drawRoad() {
   ctx.fillStyle = 'grey';
-  ctx.fillRect(roadX, roadY, roadWidth, canvas.height);
-  ctx.fillRect(roadX, roadY - canvas.height, roadWidth, canvas.height);
+  ctx.fillRect(roadX, roadY1, roadWidth, canvas.height);
+  ctx.fillRect(roadX, roadY2, roadWidth, canvas.height);
+
   ctx.strokeStyle = 'white';
   ctx.lineWidth = 5;
   ctx.setLineDash([20, 15]);
   ctx.beginPath();
-  ctx.moveTo(roadX + roadWidth / 2, roadY);
-  ctx.lineTo(roadX + roadWidth / 2, roadY + canvas.height);
-  ctx.moveTo(roadX + roadWidth / 2, roadY - canvas.height);
-  ctx.lineTo(roadX + roadWidth / 2, roadY);
+  ctx.moveTo(roadX + roadWidth / 2, roadY1);
+  ctx.lineTo(roadX + roadWidth / 2, roadY1 + canvas.height);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(roadX + roadWidth / 2, roadY2);
+  ctx.lineTo(roadX + roadWidth / 2, roadY2 + canvas.height);
   ctx.stroke();
 }
 
@@ -151,12 +156,18 @@ function update() {
   if ((keys.ArrowDown || keys.KeyS) && carY < canvas.height - carHeight) {
     carY += carSpeed;
   }
-  roadY += roadSpeed;
-  if (roadY >= canvas.height) {
-    roadY = 0;
+  
+  roadY1 += roadSpeed;
+  roadY2 += roadSpeed;
+
+  if (roadY1 >= canvas.height) {
+    roadY1 = roadY2 - canvas.height;
+  }
+  if (roadY2 >= canvas.height) {
+    roadY2 = roadY1 - canvas.height;
   }
 
-  elapsedTime += 1 / 60; // oyunun 60 FPS çalıştığını varsayıyoruz
+  elapsedTime += 1 / 60; // Oyunun 60 FPS çalıştığını varsayıyoruz
   if (elapsedTime >= 1) {
     score += 1;
     document.getElementById('score').innerText = `Score: ${score}`;
@@ -226,23 +237,31 @@ function gameLoop() {
   if (gameOver) return;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  update();
   drawRoad();
   drawCar();
   drawEnemyCars();
   drawBoxes();
-  update();
   checkCollision();
+
   requestAnimationFrame(gameLoop);
 }
 
 function restartGame() {
-  gameOver = false;
-  score = 0;
-  enemyCars.length = 0;
-  boxes.length = 0;
   carX = (canvas.width - carWidth) / 2;
   carY = canvas.height - carHeight - 20;
+  roadY1 = 0;
+  roadY2 = -canvas.height;
+  enemyCars.length = 0;
+  boxes.length = 0;
+  score = 0;
+  gameOver = false;
   document.getElementById('restartButton').style.display = 'none';
+  elapsedTime = 0;
+  isInvisible = false;
+  invisibleTime = 0;
+  gameLoop();
 }
 
 document.addEventListener('keydown', (e) => {
@@ -259,16 +278,5 @@ document.addEventListener('keyup', (e) => {
 
 document.getElementById('restartButton').addEventListener('click', restartGame);
 
-document.getElementById('leftButton').addEventListener('click', () => {
-  if (carX > roadX) {
-    carX -= carSpeed;
-  }
-});
-
-document.getElementById('rightButton').addEventListener('click', () => {
-  if (carX < roadX + roadWidth - carWidth) {
-    carX += carSpeed;
-  }
-});
-
+// Başlangıçta oyun döngüsünü başlat
 gameLoop();
