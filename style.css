@@ -78,6 +78,7 @@ canvas {
   cursor: pointer;
   user-select: none; /* Metin seçimini devre dışı bırak */
   -webkit-user-select: none; /* Eski tarayıcılar için */
+  -webkit-touch-callout: none; /* Mobil tarayıcılarda kopyalamayı engelle */
 }
 
 @media only screen and (max-width: 600px) {
