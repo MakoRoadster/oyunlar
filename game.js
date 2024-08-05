@@ -238,7 +238,7 @@ function gameLoop() {
   }
 
   // Düşman arabası oluşturma
-  if (Math.random() < 0.02) {
+  if (Math.random() < 0.014) {
     createEnemyCar();
   }
 
