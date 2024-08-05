@@ -42,13 +42,13 @@ const carImage = new Image();
 carImage.src = 'file.png'; // Oyuncu arabası görseli
 
 const invisibleCarImage = new Image();
-invisibleCarImage.src = 'invisible_car.png'; // Görünmez arabanın görseli
+invisibleCarImage.src = 'file2.png'; // Görünmez arabanın görseli
 
 const enemyCarImage = new Image();
 enemyCarImage.src = 'file1.png'; // Düşman arabası görseli
 
 const boxImage = new Image();
-boxImage.src = 'box.png'; // Kutu görseli
+boxImage.src = '59394.png'; // Kutu görseli
 
 function updateEnemyCarSpeed() {
   if (score >= 210) {
