@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2D Car Game</title>
-  <link rel="stylesheet" href="style.css"> <!-- CSS dosyasına bağlantı -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Car Game</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; margin: 0 auto; background: #87CEEB; }
+        #gameControls { position: fixed; bottom: 10px; width: 100%; text-align: center; }
+        .controlButton { background: #ddd; border: 1px solid #ccc; padding: 10px; margin: 5px; cursor: pointer; }
+        #restartButton { display: none; }
+    </style>
 </head>
 <body>
-  <canvas id="gameCanvas" width="400" height="600"></canvas>
-  <div id="score">Score: 0</div>
-  <div id="restartButton">Restart</div>
-  <div id="mobileControls">
-    <div id="leftButton">←</div>
-    <div id="rightButton">→</div>
-  </div>
-  <script src="game.js"></script>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="gameControls">
+        <div id="leftButton" class="controlButton">←</div>
+        <div id="rightButton" class="controlButton">→</div>
+        <button id="restartButton" onclick="restartGame()">Restart</button>
+    </div>
+    <div id="score">Score: 0</div>
+    <script src="game.js"></script>
 </body>
 </html>
