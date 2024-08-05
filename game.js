@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 const carWidth = 40;
 const carHeight = 70;
-const invisibleCarWidth = 40; 
+const invisibleCarWidth = 40;
 const invisibleCarHeight = 70;
 let carX = (canvas.width - carWidth) / 2;
 let carY = canvas.height - carHeight - 20;
@@ -286,7 +286,9 @@ canvas.addEventListener('touchstart', (e) => {
 
   if (touchX < middleX) {
     keys.ArrowLeft = true;
+    keys.ArrowRight = false; // Sol tarafa dokunulduğunda sağ hareketi kapat
   } else {
+    keys.ArrowLeft = false; // Sağ tarafa dokunulduğunda sol hareketi kapat
     keys.ArrowRight = true;
   }
 });
