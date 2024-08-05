@@ -27,8 +27,6 @@ const keys = {
 const enemyCars = [];
 const enemyCarWidth = 40;
 const enemyCarHeight = 70;
-const minSpeed = 3;
-const maxSpeed = 7;
 
 let score = 0;
 let gameOver = false;
@@ -40,10 +38,31 @@ carImage.src = 'file.png'; // Oyuncu arabası görseli
 const enemyCarImage = new Image();
 enemyCarImage.src = 'file1.png'; // Düşman arabası görseli
 
+function updateEnemyCarSpeed() {
+  if (score >= 210) {
+    return { min: 19, max: 14 };
+  } else if (score >= 180) {
+    return { min: 17, max: 12 };
+  } else if (score >= 150) {
+    return { min: 15, max: 10 };
+  } else if (score >= 120) {
+    return { min: 13, max: 8 };
+  } else if (score >= 90) {
+    return { min: 11, max: 6 };
+  } else if (score >= 60) {
+    return { min: 9, max: 5 };
+  } else if (score >= 30) {
+    return { min: 8, max: 4 };
+  } else {
+    return { min: 3, max: 7 }; // Varsayılan hız aralığı
+  }
+}
+
 function createEnemyCar() {
+  const { min, max } = updateEnemyCarSpeed();
   const enemyX = roadX + Math.floor(Math.random() * (roadWidth - enemyCarWidth));
   const enemyY = -enemyCarHeight;
-  const speed = minSpeed + Math.random() * (maxSpeed - minSpeed);
+  const speed = min + Math.random() * (max - min);
 
   let safeToAdd = true;
   for (let i = 0; i < enemyCars.length; i++) {
